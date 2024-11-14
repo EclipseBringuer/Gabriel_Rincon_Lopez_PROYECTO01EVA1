@@ -22,6 +22,10 @@ function askDimensions() {
   return { rows, columns };
 }
 
+/**
+ * Función que pide el número de bombas al usuario en base a un juego pasado por parametro
+ * @param {BuscaMinas} game - Juego buscaminas
+ */
 function askNumBombs(game) {
   let numBombs = 0;
   do {
@@ -32,7 +36,7 @@ function askNumBombs(game) {
 }
 
 /**
- *
+ * Código principal del juego
  */
 function playGame() {
   let { rows, columns } = askDimensions();
