@@ -1,16 +1,45 @@
 import { BuscaMinas } from "./BuscaMinas.js";
 
-function getDimensions() {
-  rows = 0;
-  columns = 0;
+/**
+ * Función que pide los datos de las dimensiones del tablero y las devuelve en formato objeto
+ * @returns {Object} Las dimensiones del tablero
+ */
+function askDimensions() {
+  let rows = 0;
+  let columns = 0;
+
+  do {
+    rows = parseInt(prompt("Introduce el número de filas (10-20): ", 10));
+    if (!BuscaMinas.validDimension(rows)) alert("Número de filas no válido");
+  } while (!BuscaMinas.validDimension(rows));
+
+  do {
+    columns = parseInt(prompt("Introduce el número de columnas (10-20): ", 10));
+    if (!BuscaMinas.validDimension(columns))
+      alert("Número de columnas no válido");
+  } while (!BuscaMinas.validDimension(columns));
 
   return { rows, columns };
 }
 
-let game = new BuscaMinas(9, 9);
+function askNumBombs(game) {
+  let numBombs = 0;
+  do {
+    numBombs = parseInt(prompt("Introduce el número de bombas: "));
+    if (!game.validNumberOfBombs(numBombs)) alert("Número de bombas no válido");
+  } while (!game.validNumberOfBombs(numBombs));
+  game.setBombsNumber(numBombs);
+}
 
-game.setBombsNumber(16);
-game.generateBoard();
-let tablero = game.printBoard();
+/**
+ *
+ */
+function playGame() {
+  let { rows, columns } = askDimensions();
+  let game = new BuscaMinas(rows, columns);
+  askNumBombs(game);
+  game.generateBoard();
+  document.getElementById("board").innerHTML = game.printBoard();
+}
 
-document.getElementById("board").innerHTML = tablero;
+playGame();
