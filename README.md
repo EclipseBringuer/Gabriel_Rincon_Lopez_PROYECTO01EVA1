@@ -1,1 +1,1 @@
-##Busca minas
+# Proyecto Busca minas
