@@ -1,0 +1,16 @@
+{
+  "name": "gabriel_rincon_lopez_proyecto01eva1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "docs": "jsdoc ./src -d ./docs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jsdoc": "^4.0.4"
+  }
+}
