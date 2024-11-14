@@ -151,6 +151,10 @@ export class BuscaMinas {
     this.board = board;
   }
 
+  /**
+   * Devuelve el tablero en formato HTML
+   * @returns {string} El tablero en formato HTML
+   */
   printBoard() {
     let board = "";
 
