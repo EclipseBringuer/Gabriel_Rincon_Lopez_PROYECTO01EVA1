@@ -29,7 +29,11 @@ function askDimensions() {
 function askNumBombs(game) {
   let numBombs = 0;
   do {
-    numBombs = parseInt(prompt("Introduce el número de bombas: "));
+    numBombs = parseInt(
+      prompt(
+        `Introduce el número de bombas(${game.getMinNumberBombs()}-${game.getMaxNumberBombs()}): `
+      )
+    );
     if (!game.validNumberOfBombs(numBombs)) alert("Número de bombas no válido");
   } while (!game.validNumberOfBombs(numBombs));
   game.setBombsNumber(numBombs);
