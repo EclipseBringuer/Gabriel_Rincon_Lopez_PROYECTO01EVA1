@@ -43,11 +43,21 @@ function askNumBombs(game) {
  * Código principal del juego
  */
 function playGame() {
+  //Preguntamos por las dimensiones del tablero
   let { rows, columns } = askDimensions();
+
+  //Creamos un BuscaMinas con esas dimensiones
   let game = new BuscaMinas(rows, columns);
+
+  //Preguntamos por el número de bombas
   askNumBombs(game);
+
+  //Generamos el tablero con los datos introducidos
   game.generateBoard();
+
+  //Imprime el tablero en la pantalla
   document.getElementById("board").innerHTML = game.printBoard();
 }
 
+//Llamamos al método principal para iniciar el juegos
 playGame();
