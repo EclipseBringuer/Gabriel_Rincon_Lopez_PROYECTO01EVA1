@@ -40,6 +40,30 @@ function askNumBombs(game) {
 }
 
 /**
+ * Función para empezar la música
+ */
+function startMusic() {
+  const music = document.getElementById("background-music");
+  if (music) {
+    music.play();
+  } else {
+    console.warn("Elemento de música no encontrado.");
+  }
+}
+
+/**
+ * Función para pausar la música
+ */
+function stopMusic() {
+  const music = document.getElementById("background-music");
+  if (music) {
+    music.pause();
+  } else {
+    console.warn("Elemento de música no encontrado.");
+  }
+}
+
+/**
  * Código principal del juego
  */
 function playGame() {
@@ -57,6 +81,14 @@ function playGame() {
 
   //Imprime el tablero en la pantalla
   document.getElementById("board").innerHTML = game.printBoard();
+
+  document.getElementById("reset").addEventListener("click", () => {
+    startMusic();
+  });
+
+  document.getElementById("solution").addEventListener("click", () => {
+    stopMusic();
+  });
 }
 
 //Llamamos al método principal para iniciar el juegos
