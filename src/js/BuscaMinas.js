@@ -73,7 +73,8 @@ export class BuscaMinas {
   }
 
   /**
-   * Comprueba que una dimensión (fila o columna) cumple con lo indicado (menor o igual que 20 y mayor o igual que 10)
+   * Comprueba que una dimensión (fila o columna) cumple con lo indicado (menor o igual que 20 y
+   * mayor o igual que 10)
    * @returns {boolean} Si las dimensión cumple con los requisitos
    */
   static validDimension(dimension) {
@@ -91,29 +92,61 @@ export class BuscaMinas {
     );
   }
 
-  generateBoard() {
-    //Generamos un array bidimensional de celdas con las dimensiones especificadas
-    let board = [];
-    let counter = this.bombsNumber;
-    for (let i = 0; i < this.rows; i++) {
-      board[i] = [];
-      for (let j = 0; j < this.columns; j++) {
-        board[i][j] = new Cell(i, j, false);
+  /**
+   * Devuelve el mínimo de bombas que debe tener el tablero
+   * @returns {number} Mínimo de bombas del tablero
+   */
+  getMinNumberBombs() {
+    return Math.trunc((this.columns * this.rows) / 6);
+  }
+
+  /**
+   * Devuelve el máximo de bombas que debe tener el tablero
+   * @returns {number} Máximo de bombas del tablero
+   */
+  getMaxNumberBombs() {
+    return Math.trunc((this.columns * this.rows) / 2);
+  }
+
+  /**
+   * Método que se encarga de crear un tablero vacío con las dimensiones del objeto
+   */
+  createEmptyBoard() {
+    for (let r = 0; r < this.rows; r++) {
+      this.board[r] = [];
+      for (let c = 0; c < this.columns; c++) {
+        this.board[r][c] = new Cell(r, c, false);
       }
     }
+  }
 
-    //Repartimos las bombas de forma aleatoria por el tablero
+  /**
+   * Método que coloca las bombas de forma aleatoria en el tablero
+   */
+  placeBombs() {
+    //Creamos un contador con la cantidad de bombas
+    let counter = this.bombsNumber;
+
+    //Mientras haya bombas por colocar, iteramos
     do {
       let row = parseInt(Math.random() * this.rows);
       let column = parseInt(Math.random() * this.columns);
 
-      if (!board[row][column].getHasBomb()) {
-        board[row][column].setHasBomb(true);
+      /**
+       * En caso de que la celda escogida al azar no tenga bomba,
+       * la colocamos y decrementamos el contador
+       */
+      if (!this.board[row][column].getHasBomb()) {
+        this.board[row][column].setHasBomb(true);
         counter--;
       }
     } while (counter > 0);
+  }
 
-    //Constante con las diferentes celdas a revisar
+  /**
+   * Método que calcula el número de bombas cercanas de cada celda
+   */
+  calculateNearBombs() {
     const directions = [
       [1, -1], //Diagonal superior izquierda
       [1, 0], //Central superior
@@ -125,30 +158,50 @@ export class BuscaMinas {
       [-1, 1], //Diagonal inferior derecha
     ];
 
-    //Revisar y asignar el numero de bombas cercanas
+    //Recorremos el tablero
     for (let r = 0; r < this.rows; r++) {
       for (let c = 0; c < this.columns; c++) {
+        //Por cada celda establecemos un contador de bombas cercanas
         let nearBombs = 0;
+
+        //Comprobamos todas las direcciones con un bucle
         for (let [x, y] of directions) {
           let nearRow = r + x;
           let nearColumn = c + y;
+
+          /**
+           * Si la posición de la celda que estamos comprobando esta dentro del rango
+           * del tablero, y si esta celda tiene una bomba, incrementamos el contador.
+           */
           if (
             nearRow >= 0 &&
             nearRow < this.rows &&
             nearColumn >= 0 &&
             nearColumn < this.columns
           ) {
-            if (board[nearRow][nearColumn].getHasBomb()) {
+            if (this.board[nearRow][nearColumn].getHasBomb()) {
               nearBombs++;
             }
           }
         }
-        board[r][c].setNearBombs(nearBombs);
+        //Por último añadimos el contador a la celda
+        this.board[r][c].setNearBombs(nearBombs);
       }
     }
+  }
 
-    //Guardamos el tablero creado
-    this.board = board;
+  /**
+   * Método que genera el tablero del buscaminas
+   */
+  generateBoard() {
+    //Crea un tablero con celdas según las dimensiones
+    this.createEmptyBoard();
+
+    //Coloca las bombas de forma aleatoria
+    this.placeBombs();
+
+    //Calcula el número de bombas cercanas de cada celda
+    this.calculateNearBombs();
   }
 
   /**
