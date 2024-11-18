@@ -64,6 +64,41 @@ function stopMusic() {
 }
 
 /**
+ * Revela el contenido de una celda y verifica las condiciones de victoria o derrota.
+ * @param {number} row - Fila de la celda a revelar.
+ * @param {number} column - Columna de la celda a revelar.
+ *
+ * No he podido arreglar el error, ya que el HTML no reconoce la función
+ */
+function revealCell(board, row, column) {
+  const cell = board[row][column];
+  const cellElement = document.querySelector(
+    `td[data-row="${row}"][data-column="${column}"]`
+  );
+
+  if (!cellElement || !cellElement.classList.contains("covered")) {
+    return; // Evita destapar celdas ya reveladas
+  }
+
+  if (cell.getHasBomb()) {
+    cellElement.classList.remove("covered");
+    cellElement.classList.add("bomb");
+    cellElement.textContent = "💣";
+    alert("Has perdido 😢");
+    this.revealAllBombs();
+    return;
+  }
+
+  cellElement.classList.remove("covered");
+  cellElement.classList.add("revealed");
+  cellElement.textContent = cell.getNearBombs() || "";
+
+  if (BuscaMinas.checkVictory()) {
+    alert("¡Victoria! 🎉");
+  }
+}
+
+/**
  * Código principal del juego
  */
 function playGame() {
@@ -79,16 +114,22 @@ function playGame() {
   //Generamos el tablero con los datos introducidos
   game.generateBoard();
 
-  //Imprime el tablero en la pantalla
-  document.getElementById("board").innerHTML = game.printBoard();
+  document.getElementById("solution").addEventListener("click", () => {
+    document.getElementById("board").innerHTML = game.printSolutionBoard();
+  });
 
   document.getElementById("reset").addEventListener("click", () => {
-    startMusic();
+    game.generateBoard();
+    game.printBoard();
   });
 
-  document.getElementById("solution").addEventListener("click", () => {
-    stopMusic();
-  });
+  //Imprime el tablero en la pantalla
+  game.printBoard();
+
+  //Si el usuario quiere música la iniciamos
+  if (confirm("¿Quieres tener Música?")) {
+    startMusic();
+  }
 }
 
 //Llamamos al método principal para iniciar el juegos

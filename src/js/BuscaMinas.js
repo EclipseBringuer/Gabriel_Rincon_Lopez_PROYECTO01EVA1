@@ -208,7 +208,7 @@ export class BuscaMinas {
    * Devuelve el tablero solucionado en formato HTML
    * @returns {string} El tablero en formato HTML
    */
-  printSolution() {
+  printSolutionBoard() {
     let board = "";
 
     for (let r = 0; r < this.rows; r++) {
@@ -224,5 +224,71 @@ export class BuscaMinas {
     }
 
     return board;
+  }
+
+  /**
+   * Muestra un tablero interactivo donde las celdas están tapadas inicialmente.
+   * Al hacer clic en una celda, se destapa y muestra lo que contiene (bomba o contador).
+   * También verifica condiciones de victoria y derrota.
+   */
+  printBoard() {
+    const boardElement = document.getElementById("board");
+
+    let boardHTML = "";
+
+    for (let r = 0; r < this.rows; r++) {
+      boardHTML += "<tr>";
+      for (let c = 0; c < this.columns; c++) {
+        boardHTML += `<td 
+        data-row="${r}" 
+        data-column="${c}" 
+        class="cell covered" 
+        onclick="revealCell(game.getBoard(), ${r}, ${c})">
+      </td>`;
+      }
+      boardHTML += "</tr>";
+    }
+
+    boardElement.innerHTML = boardHTML;
+  }
+
+  /**
+   * Revela todas las bombas al finalizar el juego (derrota).
+   */
+  revealAllBombs() {
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.columns; c++) {
+        const cell = this.board[r][c];
+        const cellElement = document.querySelector(
+          `td[data-row="${r}"][data-column="${c}"]`
+        );
+
+        if (cell.getHasBomb()) {
+          cellElement.classList.remove("covered");
+          cellElement.classList.add("bomb");
+          cellElement.textContent = "💣";
+        }
+      }
+    }
+  }
+
+  /**
+   * Comprueba si todas las celdas sin bombas están reveladas.
+   * @returns {boolean} Si el jugador ha ganado.
+   */
+  static checkVictory() {
+    for (let r = 0; r < this.rows; r++) {
+      for (let c = 0; c < this.columns; c++) {
+        const cell = this.board[r][c];
+        const cellElement = document.querySelector(
+          `td[data-row="${r}"][data-column="${c}"]`
+        );
+
+        if (!cell.getHasBomb() && cellElement.classList.contains("covered")) {
+          return false; // Hay celdas no bombeadas aún tapadas
+        }
+      }
+    }
+    return true; // Todas las celdas no bombeadas están reveladas
   }
 }

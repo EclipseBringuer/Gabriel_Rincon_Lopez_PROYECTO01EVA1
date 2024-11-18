@@ -25,6 +25,27 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.cell {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #ccc;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.covered {
+  background-color: #aaa;
+}
+.revealed {
+  background-color: #fff;
+}
+.bomb {
+  background-color: #f00;
+  color: #fff;
+}
+
 main {
   display: flex;
   flex-direction: column;
