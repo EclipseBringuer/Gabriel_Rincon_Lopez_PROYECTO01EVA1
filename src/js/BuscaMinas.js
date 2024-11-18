@@ -87,8 +87,8 @@ export class BuscaMinas {
    */
   validNumberOfBombs(numberBombs) {
     return (
-      (this.columns * this.rows) / 6 < numberBombs &&
-      (this.columns * this.rows) / 2 > numberBombs
+      Math.trunc((this.columns * this.rows) / 6) <= numberBombs &&
+      Math.trunc((this.columns * this.rows) / 2) >= numberBombs
     );
   }
 
@@ -205,10 +205,10 @@ export class BuscaMinas {
   }
 
   /**
-   * Devuelve el tablero en formato HTML
+   * Devuelve el tablero solucionado en formato HTML
    * @returns {string} El tablero en formato HTML
    */
-  printBoard() {
+  printSolution() {
     let board = "";
 
     for (let r = 0; r < this.rows; r++) {
